@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@color/color_gris_medio"
+    tools:context=".MainActivity">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/style_semirecto_lleno_blanco"
+                android:padding="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:id="@+id/ET_Phone"
+                    android:textAlignment="center"
+                    android:hint="Número telefónico"/>
+                <Button
+                    android:id="@+id/BTN_Phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00FFFFFF"
+                    android:text="Llamar"
+                    android:textAllCaps="false"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/style_semirecto_lleno_blanco"
+                android:padding="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/ET_Share_Text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:textAlignment="center"
+                    android:hint="Texto para compartir"/>
+                <Button
+                    android:id="@+id/BTN_Share_Text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FFFFFFFF"
+                    android:text="Compartir"
+                    android:textAllCaps="false"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/style_semirecto_lleno_blanco"
+                android:padding="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/IV_Image_Share"
+                    android:layout_width="match_parent"
+                    android:src="@drawable/image_camera"
+                    android:scaleType="centerInside"
+                    android:layout_height="200dp" />
+                <Button
+                    android:id="@+id/BTN_Image_Share"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FFFFFFFF"
+                    android:text="Compartir"
+                    android:textAllCaps="false"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
