@@ -26,13 +26,28 @@
                 android:layout_marginBottom="10dp"
                 android:orientation="vertical">
 
-                <EditText
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="phone"
-                    android:id="@+id/ET_Phone"
-                    android:textAlignment="center"
-                    android:hint="Número telefónico"/>
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/TV_Phone"
+                        android:gravity="center"
+                        android:hint="Número telefónico"/>
+
+                    <ImageButton
+                        android:id="@+id/BTN_Contact"
+                        android:layout_width="50dp"
+                        android:src="@drawable/ic_perm_contact_calendar_black_24dp"
+                        android:background="#00000000"
+                        android:layout_height="40dp" />
+
+                </LinearLayout>
+
                 <Button
                     android:id="@+id/BTN_Phone"
                     android:layout_width="match_parent"
@@ -58,13 +73,28 @@
                     android:inputType="text"
                     android:textAlignment="center"
                     android:hint="Texto para compartir"/>
-                <Button
-                    android:id="@+id/BTN_Share_Text"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#FFFFFFFF"
-                    android:text="Compartir"
-                    android:textAllCaps="false"/>
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/BTN_Share_Text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="#FFFFFFFF"
+                        android:text="Compartir"
+                        android:textAllCaps="false"/>
+                    <Button
+                        android:id="@+id/BTN_Share_Text_WA"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="#FFFFFFFF"
+                        android:text="WhatsApp"
+                        android:textAllCaps="false"/>
+                </LinearLayout>
+
 
             </LinearLayout>
 
@@ -82,13 +112,27 @@
                     android:src="@drawable/image_camera"
                     android:scaleType="centerInside"
                     android:layout_height="200dp" />
-                <Button
-                    android:id="@+id/BTN_Image_Share"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#FFFFFFFF"
-                    android:text="Compartir"
-                    android:textAllCaps="false"/>
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/BTN_Image_Share"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="#FFFFFFFF"
+                        android:text="Compartir"
+                        android:textAllCaps="false"/>
+                    <Button
+                        android:id="@+id/BTN_Image_Share_WA"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="#FFFFFFFF"
+                        android:text="WhatsApp"
+                        android:textAllCaps="false"/>
+                </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>

@@ -17,7 +17,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -37,8 +39,11 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.BTN_Phone)         Button buttonPhone;
     @BindView(R.id.BTN_Share_Text)    Button buttonTextShare;
+    @BindView(R.id.BTN_Share_Text_WA) Button buttonTextShareWA;
     @BindView(R.id.BTN_Image_Share)   Button buttonImageShare;
-    @BindView(R.id.ET_Phone)          EditText editTextPhone;
+    @BindView(R.id.BTN_Image_Share_WA)Button buttonImageShareWA;
+    @BindView(R.id.TV_Phone)          TextView textViewPhone;
+    @BindView(R.id.BTN_Contact)       ImageButton buttonContact;
     @BindView(R.id.ET_Share_Text)     EditText editTextShare;
     @BindView(R.id.IV_Image_Share)    ImageView imageViewShare;
 
@@ -48,15 +53,39 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        buttonPhone.setOnClickListener(view -> {
-            checkPermission(Manifest.permission.CALL_PHONE, hasPermission -> {
-                phoneCall();
+
+
+
+        buttonContact.setOnClickListener(view -> {
+            checkPermission(Manifest.permission.READ_CONTACTS, hasPermission -> {
+                if(hasPermission){
+                    Intent intent = new Intent(this,ContactsActivity.class);
+                    startActivityForResult(intent,0);
+                }
             });
         });
+        buttonPhone.setOnClickListener(view -> {
+            checkPermission(Manifest.permission.CALL_PHONE, hasPermission -> {
+                if(hasPermission) {
+                    phoneCall();
+                }
+            });
+        });
+
+
+
+
 
         buttonTextShare.setOnClickListener(view -> {
             shareText();
         });
+        buttonTextShareWA.setOnClickListener(view -> {
+            shareTextWA();
+        });
+
+
+
+
 
         imageViewShare.setOnClickListener(view -> {
             checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, hasWritePermission -> {
@@ -69,8 +98,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         });
+
         buttonImageShare.setOnClickListener(view -> {
             shareImage();
+        });
+        buttonImageShareWA.setOnClickListener(view -> {
+            shareImageWA();
         });
     }
 
@@ -111,17 +144,50 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if ( resultCode == RESULT_OK ) {
-            if( photoUri != null){
-                Glide.with(this)
-                     .load(photoUri)
-                     .centerCrop()
-                     .into(imageViewShare);
-            } else {
-                Toast.makeText(this,"Error durante la fotografía",Toast.LENGTH_LONG).show();
+
+        if (resultCode == RESULT_OK) {
+
+            if (requestCode == 0) {
+                if( data != null ) {
+                    try {
+                        String phoneNumber = data.getExtras().getString("phone");
+                        textViewPhone.setText(phoneNumber);
+                    } catch (Exception ignored){
+                        Toast.makeText(this, "Error cargando teléfono", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(this, "Error cargando teléfono", Toast.LENGTH_LONG).show();
+                }
+
+            } else if (requestCode == 1) {
+
+                if (photoUri != null) {
+                    Glide.with(this)
+                            .load(photoUri)
+                            .centerCrop()
+                            .into(imageViewShare);
+                } else {
+                    Toast.makeText(this, "Error durante la fotografía", Toast.LENGTH_LONG).show();
+                }
+
             }
         }
 
@@ -135,7 +201,23 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+    public void shareImageWA( ){
+        if( photoUri != null ) {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("image/*");
+            intent.setPackage("com.whatsapp");
+            intent.putExtra(Intent.EXTRA_STREAM, photoUri);
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            try {
+                startActivity(Intent.createChooser(intent, "Compartir fotografía"));
+            } catch(Exception ignored){
+                Toast.makeText(this,"WhatsApp no esta instalado en este dispositivo",Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(this,"Tome una fotografía para compartir",Toast.LENGTH_LONG).show();
+        }
+    }
     public void shareImage( ){
         if( photoUri != null ) {
             Intent intent = new Intent();
@@ -149,6 +231,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    public void shareTextWA(){
+        if( !editTextShare.getText().toString().isEmpty() ) {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.setPackage("com.whatsapp");
+            intent.putExtra(android.content.Intent.EXTRA_TEXT, editTextShare.getText().toString());
+            try{
+                startActivity(Intent.createChooser(intent, "Compartir texto"));
+            } catch(Exception ignored){
+                Toast.makeText(this,"WhatsApp no esta instalado en este dispositivo",Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(this,"Introduzca texto a compartir",Toast.LENGTH_LONG).show();
+        }
+    }
     public void shareText(){
         if( !editTextShare.getText().toString().isEmpty() ) {
             Intent intent = new Intent(Intent.ACTION_SEND);
@@ -161,9 +259,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void phoneCall(){
-        if ( editTextPhone.getText().toString().length() == 10 ){
+        if ( !textViewPhone.getText().toString().isEmpty() ){
             Intent intent = new Intent(Intent.ACTION_CALL,
-                    Uri.parse("tel:" + editTextPhone.getText().toString()));
+                    Uri.parse("tel:" + textViewPhone.getText().toString()));
             startActivity(intent);
         } else {
             Toast.makeText(this,"El número introducido tiene formato inválido",Toast.LENGTH_LONG).show();
