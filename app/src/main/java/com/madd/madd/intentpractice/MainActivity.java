@@ -37,15 +37,15 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.BTN_Phone)         Button buttonPhone;
-    @BindView(R.id.BTN_Share_Text)    Button buttonTextShare;
-    @BindView(R.id.BTN_Share_Text_WA) Button buttonTextShareWA;
-    @BindView(R.id.BTN_Image_Share)   Button buttonImageShare;
-    @BindView(R.id.BTN_Image_Share_WA)Button buttonImageShareWA;
-    @BindView(R.id.TV_Phone)          TextView textViewPhone;
-    @BindView(R.id.BTN_Contact)       ImageButton buttonContact;
-    @BindView(R.id.ET_Share_Text)     EditText editTextShare;
-    @BindView(R.id.IV_Image_Share)    ImageView imageViewShare;
+    @BindView(R.id.BTN_Phone)          Button buttonPhone;
+    @BindView(R.id.BTN_Share_Text)     Button buttonTextShare;
+    @BindView(R.id.BTN_Share_Text_WA)  Button buttonTextShareWA;
+    @BindView(R.id.BTN_Image_Share)    Button buttonImageShare;
+    @BindView(R.id.BTN_Image_Share_WA) Button buttonImageShareWA;
+    @BindView(R.id.TV_Phone)           TextView textViewPhone;
+    @BindView(R.id.BTN_Contact)        ImageButton buttonContact;
+    @BindView(R.id.ET_Share_Text)      EditText editTextShare;
+    @BindView(R.id.IV_Image_Share)     ImageView imageViewShare;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,7 +208,6 @@ public class MainActivity extends AppCompatActivity {
             intent.setType("image/*");
             intent.setPackage("com.whatsapp");
             intent.putExtra(Intent.EXTRA_STREAM, photoUri);
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             try {
                 startActivity(Intent.createChooser(intent, "Compartir fotografía"));
             } catch(Exception ignored){
@@ -224,7 +223,6 @@ public class MainActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("image/*");
             intent.putExtra(Intent.EXTRA_STREAM, photoUri);
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(Intent.createChooser(intent, "Compartir fotografía"));
         } else {
             Toast.makeText(this,"Tome una fotografía para compartir",Toast.LENGTH_LONG).show();

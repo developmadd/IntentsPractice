@@ -12,9 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ContactsActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
+    @BindView(R.id.RV_Contacts) RecyclerView recyclerView;
     ContactAdapter contactAdapter;
     List<Contact> contactList = new ArrayList<>();
 
@@ -23,14 +26,15 @@ public class ContactsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
 
+        ButterKnife.bind(this);
+
         contactAdapter = new ContactAdapter(contactList, contact -> {
             Intent resultIntent = new Intent();
             resultIntent.putExtra("phone",contact.number);
-            setResult(-1,resultIntent);
+            setResult(RESULT_OK,resultIntent);
             finish();
         });
 
-        recyclerView = findViewById(R.id.RV_Contacts);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(contactAdapter);
 
@@ -67,11 +71,19 @@ public class ContactsActivity extends AppCompatActivity {
                         null);
 
                 while (phones.moveToNext()){
-                    String number = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    String number = phones.getString(
+                            phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     number = number.replace("(" ,"");
                     number = number.replace(")" ,"");
                     number = number.replace("+" ,"");
                     number = number.replaceAll(" " ,"");
+                    contactList.add( new Contact(name,number));
+                    contactList.add( new Contact(name,number));
+                    contactList.add( new Contact(name,number));
+                    contactList.add( new Contact(name,number));
+                    contactList.add( new Contact(name,number));
+                    contactList.add( new Contact(name,number));
+                    contactList.add( new Contact(name,number));
                     contactList.add( new Contact(name,number));
                     break;
                 }
