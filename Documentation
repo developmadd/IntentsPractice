@@ -1,29 +1,29 @@
 
 Intents:
-Los intents son vias de comunicacion entre componentes ya sea dentro de una aplicacion o dentro del mismo sistema operativo, es decir, un intent es capaz de
-solicitar un componente que realice una accion que necesitemos o abrir especificamente un componente que necesitemps, esta diferencia establece los dos tipos
+Los intents son vias de comunicación entre componentes ya sea dentro de una aplicación o dentro del mismo sistema operativo, es decir, un intent es capaz de
+solicitar un componente que realice una acción que necesitemos o abrir específicamente un componente que necesitemos, esta diferencia establece los dos tipos
 de intents que existen:
-- Implicitos: Que solicitan un conjunto de componentes capaz de llevar a cabo una acción(Enviar un mensaje).
-- Explicitos: Que solicitan un componente particular ya sea dentro de la misma aplicación(Activity) o definiendo un paquete requerido(nombre de la Aplicacion).
-Los intents son creados y ejecutados desde una Actividad emplenado el metodo startActivity(). Si se requieren datos de vuelta de un componente solicitado, estos
-son obtenidos a través de un intent que dicho componente retorna. Esto se logra usando el metodo starActivityForResult() y recibiendo el intent en el metodo
+- Implícitos: Que solicitan un conjunto de componentes capaces de llevar a cabo una acción(por ejemplo enviar un mensaje).
+- Explícitos: Que solicitan un componente particular ya sea dentro de la misma aplicación(Activity) o definiendo un paquete requerido(nombre de la Aplicacion).
+Los intents son creados y ejecutados desde una Actividad empleando el método startActivity(). Si se requieren datos de vuelta de un componente solicitado, estos
+son obtenidos a través de un intent que dicho componente retorna. Esto se logra usando el método starActivityForResult() y recibiendo el intent en el método
 sobrecargado onActivityResult()
 
-Hablando de Intents implicitos, la forma en que una aplicación es candidata a realizar una determinada acción, es estableciendo que acciones es capaz de realizar
-dicha aplicacion en los filtros de intent.
+Hablando de Intents implícitos, la forma en que una aplicación es candidata a realizar una determinada acción, es estableciendo que acciones es capaz de realizar
+dicha aplicación en los filtros de intent.
 
-Los intents estan fuertemente ligados a la declaración y peticion de permisos previos, puesto que un intent intenta comunicarse con otros componentes que
-probablemente usan recursos del dispositivo(llamadas de telefono, acceso a galeria, etc.), por lo cual es necesario tener cuidado de que permisos se requieren
+Los intents están fuertemente ligados a la declaración y petición de permisos previos, puesto que un intent intenta comunicarse con otros componentes que
+probablemente usan recursos del dispositivo(llamadas de teléfono, acceso a galería, etc.), por lo cual es necesario tener cuidado de que permisos se requieren
 y solicitarlos adecuadamente.
 
 
 Content Provider:
-El content provider es un administrador que da acceso a datos de otras aplicaciones, por ejemplo, fotografias de galeria, contactos del teledono.
+El content provider es un administrador que da acceso a datos de otras aplicaciones, por ejemplo, fotografías de galería, contactos del teléfono.
 Es necesario conceder permisos para poder acceder a dichos datos. Para poder acceder a determinada información se requiere crear un objeto de tipo
-contentResolver, y utilizando su metodo query, al cual se envian parametros que establecen detalles de los datos que se desean
+contentResolver, y utilizando su método query, al cual se envian parámetros que establecen detalles de los datos que se desean
 obtener:
 - Uri: Tipo de datos a obtener, Ej Contactos
-- Projection: Datos particulares sobre los que se tiene interes de obtener, tambien son considerados columnas. Ej: Nombre, Id, Numero telefonico, Email
+- Projection: Datos particulares sobre los que se tiene interés de obtener, también son considerados columnas. Ej: Nombre, Id, Número telefónico, Email
 - Selection, Selection Args: Criterios con los que los datos deben de cumplir para ser obtenidos.
 - Sort Order: Criterio de ordenamiento de los datos obtenidos.
 
@@ -33,10 +33,10 @@ se regresan toda la informacion disponible.
 
 
 ViewHolder:
-Es un patron de diseño utilizado en Android para la reutilizacion de vistas empleadas para crear listas, es decir, al crear una lista de N elementos,
-seria necesario crear N vistas, una por cada celda en la lista para mostrar el detalle de cada elemento, ViewHolder nos permite crear unicamente M vistas que
-caben en la pantalla. Cuando es necesario que una nueva vista aparezca se reutiliza la que recien ha desaparecido de la pantalla. De esta forma el metodo que
-infla la vista es llamado M ocasiones, pero el metodo que llena la vista es llamada que un nuevo elemento aparece o reaparece en la pantalla. Esto representa un
-beneficio en el performance de la aplicacion puesto que los metodos encargados construir ViewHolders, e inflar vistas y elementos de la vista(findById) son costosos
+Es un patrón de diseño utilizado en Android para la reutilización de vistas empleadas para crear listas, es decir, al crear una lista de N elementos,
+sería necesario crear N vistas, una por cada celda en la lista para mostrar el detalle de cada elemento, ViewHolder nos permite crear únicamente M vistas que
+caben en la pantalla. Cuando es necesario que una nueva vista aparezca se reutiliza la que recién ha desaparecido de la pantalla. De esta forma el método que
+infla la vista es llamado M ocasiones, pero el método que llena la vista es llamada que un nuevo elemento aparece o reaparece en la pantalla. Esto representa un
+beneficio en el performance de la aplicación puesto que los métodos encargados construir ViewHolders, e inflar vistas y elementos de la vista(findById) son costosos
 pero reutilizados.
 
