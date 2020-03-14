@@ -2,6 +2,7 @@ package com.madd.madd.intentpractice;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -42,10 +43,12 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.BTN_Share_Text_WA)  Button buttonTextShareWA;
     @BindView(R.id.BTN_Image_Share)    Button buttonImageShare;
     @BindView(R.id.BTN_Image_Share_WA) Button buttonImageShareWA;
+    @BindView(R.id.BTN_Image_Edit)     Button buttonImageEdit;
     @BindView(R.id.TV_Phone)           TextView textViewPhone;
     @BindView(R.id.BTN_Contact)        ImageButton buttonContact;
     @BindView(R.id.ET_Share_Text)      EditText editTextShare;
     @BindView(R.id.IV_Image_Share)     ImageView imageViewShare;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
         buttonContact.setOnClickListener(view -> {
             checkPermission(Manifest.permission.READ_CONTACTS, hasPermission -> {
                 if(hasPermission){
-                    Intent intent = new Intent(this,ContactsActivity.class);
+                    Intent intent = new Intent();
+                    intent.setClass(this,ContactsActivity.class);
                     startActivityForResult(intent,0);
                 }
             });
@@ -105,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
         buttonImageShareWA.setOnClickListener(view -> {
             shareImageWA();
         });
+        buttonImageEdit.setOnClickListener(view -> {
+            editImage();
+        });
     }
 
 
@@ -127,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
     Uri photoUri;
     void openCamera(){
         try {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            Intent intent = new Intent();
+            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
             if( intent.resolveActivity(getPackageManager()) != null ) {
 
                 String fileName = "Image_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + "_";
@@ -200,9 +208,30 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    public void editImage( ){
+        if( photoUri != null ) {
+            // Explicit intent, set specific package
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_EDIT);
+            intent.setDataAndType(photoUri,"image/*");
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            if(intent.resolveActivity(getPackageManager()) != null) {
+                try {
+                    startActivity(Intent.createChooser(intent, "Editar fotografía"));
+                } catch (Exception e) {
+                    Toast.makeText(this, "No hay componente para esta acción", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(this, "No hay componente para esta acción", Toast.LENGTH_LONG).show();
+            }
 
+        } else {
+            Toast.makeText(this,"Tome una fotografía para editar",Toast.LENGTH_LONG).show();
+        }
+    }
     public void shareImageWA( ){
         if( photoUri != null ) {
+            // Explicit intent, set specific package
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("image/*");
@@ -217,8 +246,9 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"Tome una fotografía para compartir",Toast.LENGTH_LONG).show();
         }
     }
-    public void shareImage( ){
+    public void shareImage( ) {
         if( photoUri != null ) {
+            // Implicit intent, set action
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("image/*");
@@ -232,7 +262,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void shareTextWA(){
         if( !editTextShare.getText().toString().isEmpty() ) {
-            Intent intent = new Intent(Intent.ACTION_SEND);
+            // Explicit intent, set specific package
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.setPackage("com.whatsapp");
             intent.putExtra(android.content.Intent.EXTRA_TEXT, editTextShare.getText().toString());
@@ -247,7 +279,9 @@ public class MainActivity extends AppCompatActivity {
     }
     public void shareText(){
         if( !editTextShare.getText().toString().isEmpty() ) {
-            Intent intent = new Intent(Intent.ACTION_SEND);
+            // Implicit intent, set action
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(android.content.Intent.EXTRA_TEXT, editTextShare.getText().toString());
             startActivity(Intent.createChooser(intent, "Compartir texto"));
@@ -258,8 +292,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void phoneCall(){
         if ( !textViewPhone.getText().toString().isEmpty() ){
-            Intent intent = new Intent(Intent.ACTION_CALL,
-                    Uri.parse("tel:" + textViewPhone.getText().toString()));
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_CALL);
+            intent.setData(Uri.parse("tel:" + textViewPhone.getText().toString()));
             startActivity(intent);
         } else {
             Toast.makeText(this,"El número introducido tiene formato inválido",Toast.LENGTH_LONG).show();
@@ -282,12 +317,14 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+    // Default method that checks if permission is available, if permission must be requested
+    // response will be answered in onRequestPermissionsResult.
     void checkPermission( String permissionType, PermissionRequest permissionRequest ) {
 
         int permissionCheck = ContextCompat.checkSelfPermission(this, permissionType);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // Interface is saved into global to execute the answer in onRequestPermissionsResult
                 this.permissionRequest = permissionRequest;
                 requestPermissions(new String[]{permissionType}, 1);
             }

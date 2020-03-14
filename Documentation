@@ -4,17 +4,51 @@ Los intents son vias de comunicación entre componentes ya sea dentro de una apl
 solicitar un componente que realice una acción que necesitemos o abrir específicamente un componente que necesitemos, esta diferencia establece los dos tipos
 de intents que existen:
 - Implícitos: Que solicitan un conjunto de componentes capaces de llevar a cabo una acción(por ejemplo enviar un mensaje).
-- Explícitos: Que solicitan un componente particular ya sea dentro de la misma aplicación(Activity) o definiendo un paquete requerido(nombre de la Aplicacion).
-Los intents son creados y ejecutados desde una Actividad empleando el método startActivity(). Si se requieren datos de vuelta de un componente solicitado, estos
-son obtenidos a través de un intent que dicho componente retorna. Esto se logra usando el método starActivityForResult() y recibiendo el intent en el método
-sobrecargado onActivityResult()
+- Explícitos: Que solicitan un componente particular ya sea dentro de la misma aplicación(Activity) o definiendo un paquete requerido(nombre de la Aplicacion : com.com.bestate).
 
-Hablando de Intents implícitos, la forma en que una aplicación es candidata a realizar una determinada acción, es estableciendo que acciones es capaz de realizar
-dicha aplicación en los filtros de intent.
+Las intents son creadas para comunicar los componentes Activities, Services y Broadcast Receivers. El sistema considera los datos en el Intent para
+determinar que componente utilizar y abrir.
+- Nombre de componente(Intent explicita): Se especifica el nombre del paquete y la clase dentro del paquete a utilizar. Se utiliza setClass()
+- Acción(Intent implicita): Se define la accion que se desea realizar, regularmente se utilizan acciones ya predefinidas en en la clase Intent. Se utiliza setAction()
+  Es posible tambien definir tus propias acciones de la forma com.bestate.action.BEING_AWESOME, aunque es dificil que aluguien la use inicialmente :(
+- Datos(Intent implicita): Se establece junto con una accion, y se establece el dato o el tipo de datos a realizar la accion, por ejemplo: la accion EDIT, el dato o
+  tipo de dato una imagen, entonce el sistema determinara que componente te puede servir. Se usa setData(), setType() o setDataAndType().
+- Categoria:----
+
+Si el sistema no tiene ningun componenete capaz de recibir tu intent, entonces la app se puede bloquear, por lo tanto es necesario que se utilice
+el metodo intent.resolveActivity(getPackegeManager()) que en caso que regrese null, significa que ningun componente puede ser abierto y debe de
+manejarse adecuadamente.
+
+Es posible crear un intentChooser que muestra u cuadro de dialogo mostrando todas las apps que el usuario puede elegirpara concretar su accion(intent implicito).
+
+Para abrir actividades, Los intents son creados(explicita o implicitamente) y ejecutados desde una Actividad empleando el método startActivity(). Si se requieren datos de vuelta de un componente solicitado, estos
+son obtenidos a través de un intent que dicho componente retorna. Esto se logra usando el método starActivityForResult() y recibiendo el intent en el método
+sobrecargado onActivityResult(). Para ejecutar servicios se crea(explicitamente, puesto que si ningun servicio componente recibe la intent el usuario no sabra que el
+servicio no se ejecuto) el intent indicando el servicio a ejecutar, despues este intent se usa por medio de la funcion startService(). Para un BroadcastReceiver, el intent
+se utiliza para obtener el anuncio que se emite, por ejemplo si la bateria esta baja entonces se recibe un intent con esa accion y los datos necesarios para saber actuar ante
+el evento ocurrido(El broadcast reciver es ejecutado junto con un intent filter que enlista todos los eventos de nuestro interés).
 
 Los intents están fuertemente ligados a la declaración y petición de permisos previos, puesto que un intent intenta comunicarse con otros componentes que
 probablemente usan recursos del dispositivo(llamadas de teléfono, acceso a galería, etc.), por lo cual es necesario tener cuidado de que permisos se requieren
 y solicitarlos adecuadamente.
+
+Intent Filters:
+Se declara un conjunto de intent filter por cada componente en tu aplicacion y sirven para informar a los intents que clase de accion puede ejecutar un determinado
+componente, cada uno puede tener intent filter diferentes, pr ejmpllo una actividad puede visualizar imagenes pero otra puede editarlas dentro de la mimsma app, sin
+embargo tambien puede ocurrir que la misma actividad visualice y edite la imagen, entonces esa actividad tendra ambos intent filters, entonces cuando dicha actividad
+reciba el intent sabra como comportarse de acuerdo a los datos de la intent(ocultar botones de edicion por ejemplo)
+
+Los intent filters se declaran en el manifest en cada componente de la app(regularmente solo actividades). Ya que esto sirve para
+intents implicitas se debe de establecer como <action>, <data>, <category>, estableciendo la accion que el componente puede realizar y
+el tipo de datos(MIME type) que puede manejar respectivamente(category despues lo analizo). Se pueden crear combinaciones especificas de
+acciones y tipos de datos en varios intent filter, es decir, una misma actividad puede manejar Enviar solo text/plain o Editar solo image/png.
+
+
+
+
+
+
+
 
 
 Content Provider:
@@ -39,4 +73,5 @@ caben en la pantalla. Cuando es necesario que una nueva vista aparezca se reutil
 infla la vista es llamado M ocasiones, pero el método que llena la vista es llamada que un nuevo elemento aparece o reaparece en la pantalla. Esto representa un
 beneficio en el performance de la aplicación puesto que los métodos encargados construir ViewHolders, e inflar vistas y elementos de la vista(findById) son costosos
 pero reutilizados.
+
 

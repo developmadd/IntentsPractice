@@ -132,9 +132,19 @@
                         android:background="#FFFFFFFF"
                         android:text="WhatsApp"
                         android:textAllCaps="false"/>
+                    <Button
+                        android:id="@+id/BTN_Image_Edit"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="#FFFFFFFF"
+                        android:text="Editar"
+                        android:textAllCaps="false"/>
                 </LinearLayout>
 
             </LinearLayout>
+
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
